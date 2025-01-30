@@ -2,16 +2,15 @@ const db = require('../../config/db');
 
 const verifyTenant = async (req, res, next) => {
   try {
-    const user_id = req.user.id;
-    const tenantFromAuth = req.user.tenantId;
-    db.query('SELECT tenantId FROM users WHERE id = ?', [user_id], (err, results) => {
+    
+    const tenantId = req.user.tenantId;
+    db.query('SELECT id FROM users WHERE id = ?', [tenantId], (err, results) => {
       if (err) return res.status(500).send('Internal server error');
-      if (results.length === 0) return res.status(404).send('User not found');
+      if (results.length === 0) return res.status(404).send('Tenant not found');
 
-      const tenantId = results[0].tenantId;
-      const requestTenantId = tenantFromAuth;
+      const id = results[0].id;
 
-      if (tenantId !== requestTenantId) {
+      if (tenantId !== id) {
         return res.status(403).send('Access denied');
       }
       req.user = req.user;
