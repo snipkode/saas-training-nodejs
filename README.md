@@ -69,26 +69,30 @@ Untuk mensimulasikan pembayaran menggunakan sandbox Midtrans, ikuti langkah-lang
 
 1. Pastikan Anda telah mengatur `MIDTRANS_SERVER_KEY` dan `MIDTRANS_CLIENT_KEY` di file `.env` Anda dengan kunci sandbox Midtrans Anda.
 
-2. Mulai aplikasi Anda menggunakan Docker Compose:
+2. Pastikan Anda telah mengatur `NGROK_AUTH` berupa token yang didapatkan pada website ngrok official di [ngrok Dashboard](https://dashboard.ngrok.com/endpoints).
+
+3. Mulai aplikasi Anda menggunakan Docker Compose:
    ```sh
    docker-compose up
    ```
 
-3. Buka aplikasi Anda dan lanjutkan ke bagian pembayaran.
+4. Buka aplikasi Anda dan lanjutkan ke bagian pembayaran.
 
-4. Ketika diminta untuk pembayaran, gunakan URL berikut untuk mensimulasikan proses pembayaran:
+5. Ketika diminta untuk pembayaran, gunakan URL berikut untuk mensimulasikan proses pembayaran:
    [Simulator Pembayaran Midtrans](https://simulator.sandbox.midtrans.com)
 
-5. Ikuti instruksi di Simulator Pembayaran Midtrans untuk menyelesaikan proses pembayaran.
+6. Ikuti instruksi di Simulator Pembayaran Midtrans untuk menyelesaikan proses pembayaran.
 
-6. Aplikasi Anda sekarang harus mencerminkan status pembayaran yang disimulasikan.
+7. Aplikasi Anda sekarang harus mencerminkan status pembayaran yang disimulasikan.
 
-7. Pastikan Anda telah mengatur endpoint callback notifikasi pada Midtrans dengan URL berikut:
+8. Pastikan Anda telah mengatur endpoint callback notifikasi pada Midtrans dengan URL berikut:
    ```sh
    {{baseURLTunnel}}/payments/notification
    ```
 
-8. Untuk mengetes simulasi pembayaran subscription, URL harus menggunakan ngrok. Buka ngrok pada port 4040 di browser dan copy-paste baseURL-nya ke pengaturan notification webhook Midtrans di [Midtrans Dashboard](https://dashboard.sandbox.midtrans.com/settings/vtweb_configuration/history).
+9. Untuk mengetes simulasi pembayaran subscription, URL harus menggunakan ngrok. Buka ngrok pada port 4040 di browser dan copy-paste baseURL-nya ke pengaturan notification webhook Midtrans di [Midtrans Dashboard](https://dashboard.sandbox.midtrans.com/settings/vtweb_configuration/history).
+
+10. Atur URL redirect setelah pembayaran berhasil di menu [Midtrans Dashboard](https://dashboard.sandbox.midtrans.com/settings/payment/finish-redirect).
 
 ## Skema Basis Data
 
