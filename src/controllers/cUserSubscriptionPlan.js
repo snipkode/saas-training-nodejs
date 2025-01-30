@@ -1,16 +1,41 @@
 // userSubscriptionController.js
 const db = require('../config/db');
 
+// Helper function to check if a date is valid
+const isValidDate = (dateString) => {
+  const date = new Date(dateString);
+  return date instanceof Date && !isNaN(date);
+};
+
 // Create User Subscription
 const createUserSubscription = (req, res) => {
   const user_id = req.user.userId;
-  const { plan_id, start_date, end_date, status } = req.body;
+  const { plan_id, status } = req.body;
   const created_date = new Date();
+  const currentDate = new Date();
+
+  // Set default start_date and end_date for one month from current date if not provided
+  const start_date = req.body.start_date || currentDate.toISOString().split('T')[0];
+  const end_date = req.body.end_date || new Date(currentDate.setMonth(currentDate.getMonth() + 1)).toISOString().split('T')[0];
+
+  // Validate dates
+  if (!isValidDate(start_date)) {
+    return res.status(400).send({ message: 'Invalid start date.' });
+  }
+  if (!isValidDate(end_date)) {
+    return res.status(400).send({ message: 'Invalid end date.' });
+  }
+  if (new Date(start_date) < new Date()) {
+    return res.status(400).send({ message: 'Start date cannot be a back date.' });
+  }
+  if (new Date(end_date) < new Date()) {
+    return res.status(400).send({ message: 'End date cannot be expired.' });
+  }
 
   // Check if a subscription already exists and is active
-  db.query('SELECT * FROM user_subscriptions WHERE user_id = ? AND status = "active" AND end_date >= CURDATE()', [user_id], (err, results) => {
+  db.query('SELECT * FROM user_subscriptions WHERE user_id = ? AND status = "active"', [user_id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
-    if (results.length > 0) return res.status(400).send({ message: 'An active subscription already exists for this user.' });
+    if (results.length > 0) return res.status(400).send({ message: 'An active subscription already exists for this user.', subscription: results });
 
     // Create new subscription
     db.query('INSERT INTO user_subscriptions (user_id, plan_id, start_date, end_date, status, created_date) VALUES (?, ?, ?, ?, ?, ?)', [user_id, plan_id, start_date, end_date, status, created_date], (err, result) => {
@@ -35,7 +60,7 @@ const updateUserSubscription = (req, res) => {
   const { user_id, plan_id, start_date, end_date } = req.body;
 
   // Check if the subscription is still active
-  db.query('SELECT * FROM user_subscriptions WHERE id = ? AND status = "active" AND end_date >= CURDATE()', [id], (err, results) => {
+  db.query('SELECT * FROM user_subscriptions WHERE id = ? AND status = "active"', [id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
     if (results.length === 0) return res.status(400).send({ message: 'Invalid update. The subscription is either expired or not active.' });
 
@@ -59,7 +84,7 @@ const deleteUserSubscription = (req, res) => {
     }
     if (results.length > 0) {
       console.log('Subscription already canceled:', results);
-      return res.status(400).send({ message: 'The subscription is already canceled.' });
+      return res.status(400).send({ message: 'The subscription is already canceled.', subscription: results });
     }
 
     // Cancel the subscription
@@ -69,7 +94,7 @@ const deleteUserSubscription = (req, res) => {
         return res.status(500).send({ error: err.message });
       }
       console.log('Subscription canceled successfully:', result);
-      res.status(200).send({ message: 'User subscription cancelled successfully' });
+      res.status(200).send({ message: 'User subscription cancelled successfully', subscription: results });
     });
   });
 };

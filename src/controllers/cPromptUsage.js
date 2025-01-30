@@ -15,7 +15,7 @@ const createAIPromptUsage = (req, res) => {
     const endDate = new Date(subscription.end_date);
 
     if (currentDate > endDate) {
-      return res.status(403).send({ message: 'Subscription plan has expired. Please renew your subscription.' });
+      return res.status(403).send({ message: 'Subscription plan has expired. Please renew your subscription.', subscription: subscription });
     }
 
     db.query('SELECT COUNT(*) AS prompt_count FROM ai_prompt_usage WHERE user_id = ?', [user_id], (err, countResults) => {
@@ -23,7 +23,7 @@ const createAIPromptUsage = (req, res) => {
 
       const promptCount = countResults[0].prompt_count;
       if (promptCount >= subscription.prompt_limit) {
-        return res.status(403).send({ message: 'Prompt limit exceeded. Upgrade your plan.' });
+        return res.status(403).send({ message: 'Prompt limit exceeded. Upgrade your plan.', subscription: subscription});
       }
 
       // Insert new AI prompt usage
