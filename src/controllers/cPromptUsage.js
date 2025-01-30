@@ -3,7 +3,7 @@ const db = require('../config/db');
 // Create AI Prompt Usage
 const createAIPromptUsage = (req, res) => {
   const { prompt_text } = req.body;
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
 
   // Check subscription plan and prompt limit
   db.query('SELECT us.plan_id, sp.prompt_limit, us.end_date FROM user_subscriptions us JOIN subscription_plans sp ON us.plan_id = sp.id WHERE us.user_id = ? AND us.status = "active"', [user_id], (err, results) => {
@@ -38,7 +38,7 @@ const createAIPromptUsage = (req, res) => {
 // Get all AI Prompt Usages by user
 const getAIPromptUsages = (req, res) => {
   // console.log("check user data", req.user);
-  const user_id         = req.user.id;
+  const user_id         = req.user.userId;
   db.query('SELECT * FROM ai_prompt_usage WHERE user_id = ?', [user_id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
     res.status(200).json(results);
