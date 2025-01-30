@@ -59,14 +59,15 @@ const savePaymentToDatabase = (user_id, amount, payment_status, transactionToken
     [user_id, amount, payment_status, transactionToken, payment_type], 
     (err, result) => {
       if (err) return res.status(500).send({ error: err.message });
-      res.status(201).send({ message: 'Payment created successfully', id: result.insertId, token: transactionToken });
+      res.status(201).send({ message: 'Payment created successfully', paymentId: result.insertId, token: transactionToken });
     }
   );
 };
 
 // Get all Payments
 const getPayments = (req, res) => {
-  db.query('SELECT * FROM payments', (err, results) => {
+  const user_id = req.user.userId;
+  db.query('SELECT * FROM payments WHERE user_id = ?', [user_id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
     res.status(200).json(results);
   });
