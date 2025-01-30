@@ -82,6 +82,101 @@ Proyek ini menggunakan basis data MySQL dengan skema berikut:
 5. **Pembayaran**: Pembayaran untuk langganan dicatat di tabel `payments`.
 6. **Cek Batas Prompt**: Prosedur tersimpan `CheckPromptLimit` memeriksa apakah pengguna telah melebihi batas prompt mereka berdasarkan paket langganan mereka.
 
+## API Dokumentasi
+
+Berikut adalah dokumentasi API untuk proyek ini. Dokumentasi API Swagger tersedia di path `/api-docs`.
+
+### Autentikasi
+
+#### Login Pengguna
+
+- **Endpoint**: `/api/login`
+- **Metode**: `POST`
+- **Deskripsi**: Autentikasi pengguna dan menghasilkan token akses.
+- **Permintaan**:
+  ```json
+  {
+    "email": "user@example.com",
+    "password": "password"
+  }
+  ```
+- **Respon**:
+  ```json
+  {
+    "token": "jwt_token"
+  }
+  ```
+
+### Pengguna
+
+#### Daftar Pengguna
+
+- **Endpoint**: `/api/register`
+- **Metode**: `POST`
+- **Deskripsi**: Mendaftarkan pengguna baru.
+- **Permintaan**:
+  ```json
+  {
+    "name": "User Name",
+    "email": "user@example.com",
+    "password": "password"
+  }
+  ```
+- **Respon**:
+  ```json
+  {
+    "id": 1,
+    "name": "User Name",
+    "email": "user@example.com",
+    "created_at": "2023-01-01T00:00:00Z"
+  }
+  ```
+
+### Langganan
+
+#### Mendapatkan Paket Langganan
+
+- **Endpoint**: `/api/subscription-plans`
+- **Metode**: `GET`
+- **Deskripsi**: Mendapatkan daftar paket langganan yang tersedia.
+- **Respon**:
+  ```json
+  [
+    {
+      "id": 1,
+      "name": "Free Plan",
+      "price": 0.00,
+      "prompt_limit": 5,
+      "created_at": "2023-01-01T00:00:00Z"
+    },
+    // ... paket lainnya ...
+  ]
+  ```
+
+#### Berlangganan Paket
+
+- **Endpoint**: `/api/subscribe`
+- **Metode**: `POST`
+- **Deskripsi**: Berlangganan paket langganan.
+- **Permintaan**:
+  ```json
+  {
+    "user_id": 1,
+    "plan_id": 2
+  }
+  ```
+- **Respon**:
+  ```json
+  {
+    "id": 1,
+    "user_id": 1,
+    "plan_id": 2,
+    "start_date": "2023-01-01",
+    "end_date": "2023-12-31",
+    "status": "active"
+  }
+  ```
+
 ## Kontribusi
 
 Panduan untuk berkontribusi pada proyek.
