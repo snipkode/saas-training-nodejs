@@ -1,5 +1,5 @@
-CREATE DATABASE multivendor_tenant;
-USE multivendor_tenant;
+CREATE DATABASE saas_ai;
+USE saas_ai;
 
 -- Table Tenants
 CREATE TABLE tenants (

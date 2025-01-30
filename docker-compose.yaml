@@ -1,8 +1,12 @@
 version: '3.8'
 
+networks:
+  main-network:
+    driver: bridge
+
 services:
   db:
-    image: mysql:5.7
+    image: mysql:8.0
     container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -13,12 +17,20 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-      - ./saas.sql:/docker-entrypoint-initdb.d/saas.sql
+      - ./migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - main-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   node:
     build: .
     container_name: node
     environment:
+      NODE_ENV: ${NODE_ENV:-development}
       DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
@@ -28,10 +40,14 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:rw
+      - /usr/src/app/node_modules
     working_dir: /usr/src/app
+    networks:
+      - main-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -41,6 +57,23 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - main-network
+
+  ngrok:
+    image: wernight/ngrok
+    container_name: ngrok
+    ports:
+      - "4040:4040"
+    environment:
+      NGROK_PORT: node:3000
+      NGROK_AUTH: ${NGROK_AUTH}
+    depends_on:
+      - node
+    networks:
+      - main-network
 
 volumes:
   db_data:
