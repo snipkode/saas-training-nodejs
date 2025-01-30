@@ -8,13 +8,14 @@ const userSubscriptionController = require('./controllers/userSubscriptionPlan')
 const aiPromptUsageController = require('./controllers/aiPromptUsage');
 const paymentController = require('./controllers/payment');
 const authController = require('./controllers/auth');
+const tenantMiddleware = require('./middleware/tenantMiddleware');
 
 // Users
-router.post('/users', userController.createUser);
-router.get('/users', userController.getUsers);
-router.get('/users/:id', userController.getUserById);
-router.put('/users/:id', userController.updateUser);
-router.delete('/users/:id', userController.deleteUser);
+router.post('/users', authController.verifyToken, tenantMiddleware.verifyTenant, userController.createUser);
+router.get('/users', authController.verifyToken, tenantMiddleware.verifyTenant, userController.getUsers);
+router.get('/users/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userController.getUserById);
+router.put('/users/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userController.updateUser);
+router.delete('/users/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userController.deleteUser);
 
 // Subscription Plans
 router.post('/subscription-plans', subscriptionPlanController.createSubscriptionPlan);
