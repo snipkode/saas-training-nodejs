@@ -3,7 +3,7 @@ const db = require('../config/db');
 
 // Create User Subscription
 const createUserSubscription = (req, res) => {
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
   const { plan_id, start_date, end_date, status } = req.body;
   const created_date = new Date();
 
