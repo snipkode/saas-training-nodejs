@@ -7,6 +7,7 @@ const subscriptionPlanController = require('./controllers/subscriptionPlan');
 const userSubscriptionController = require('./controllers/userSubscriptionPlan');
 const aiPromptUsageController = require('./controllers/aiPromptUsage');
 const paymentController = require('./controllers/payment');
+const authController = require('./controllers/auth');
 
 // Users
 router.post('/users', userController.createUser);
@@ -34,6 +35,15 @@ router.get('/ai-prompt-usage', aiPromptUsageController.getAIPromptUsages);
 // Payments
 router.post('/payments', paymentController.createPayment);
 router.get('/payments', paymentController.getPayments);
+
+// Authentication
+router.post('/register', authController.registerUser);
+router.post('/login', authController.loginUser);
+
+// Protected route example
+router.get('/protected', authController.verifyToken, (req, res) => {
+  res.status(200).send('This is a protected route');
+});
 
 // API Test
 router.get('/test', (req, res) => {
