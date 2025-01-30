@@ -22,7 +22,7 @@ const createUserSubscription = (req, res) => {
 
 // Get all User Subscriptions
 const getUserSubscriptions = (req, res) => {
-  const user_id = req.user.id;
+  const user_id = req.user.userId;
   db.query('SELECT * FROM user_subscriptions WHERE user_id = ? LIMIT 1', [user_id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
     res.status(200).json(results);
