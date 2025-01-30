@@ -24,6 +24,7 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('active', 'inactive') DEFAULT 'active',
     FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
     FOREIGN KEY (role_id) REFERENCES user_roles(id) ON DELETE CASCADE
 );
@@ -84,9 +85,9 @@ INSERT INTO user_roles (role_name) VALUES
 
 -- Insert Dummy Users
 INSERT INTO users (tenant_id, role_id, name, email, password_hash) VALUES 
-(1, 1, 'Alice', 'alice@tenantA.com', 'hashed_password_1'),
-(1, 2, 'Bob', 'bob@tenantA.com', 'hashed_password_2'),
-(2, 3, 'Charlie', 'charlie@tenantB.com', 'hashed_password_3');
+(1, 1, 'Admin', 'admin@solusikonsep.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6'),
+(1, 2, 'Tenant', 'tenant@solusikonsep.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6'),
+(2, 3, 'User', 'user@solusikonsep.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6');
 
 -- Insert Dummy Subscription Plans
 INSERT INTO subscription_plans (tenant_id, name, price, prompt_limit) VALUES 
