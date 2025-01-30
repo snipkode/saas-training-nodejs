@@ -93,8 +93,14 @@ const deleteUserSubscription = (req, res) => {
         console.error('Error updating subscription status:', err);
         return res.status(500).send({ error: err.message });
       }
-      console.log('Subscription canceled successfully:', result);
-      res.status(200).send({ message: 'User subscription cancelled successfully', subscription: results });
+      if (results.affectedRows > 0) { 
+        console.log('Subscription canceled successfully:', result);
+        return res.status(400).send({ message: 'User subscription cancelled successfully'});
+      }
+
+      res.status(200).send({ message: 'Not Found Data User subscription cancelled'});
+
+     
     });
   });
 };
