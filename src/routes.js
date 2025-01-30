@@ -30,8 +30,8 @@ router.put('/user-subscriptions/:id', userSubscriptionController.updateUserSubsc
 router.delete('/user-subscriptions/:id', userSubscriptionController.deleteUserSubscription);
 
 // AI Prompt Usage
-router.post('/ai-prompt-usage', aiPromptUsageController.createAIPromptUsage);
-router.get('/ai-prompt-usage', aiPromptUsageController.getAIPromptUsages);
+router.post('/ai-prompt-usage', authController.verifyToken, tenantMiddleware.verifyTenant, aiPromptUsageController.createAIPromptUsage);
+router.get('/ai-prompt-usage', authController.verifyToken, tenantMiddleware.verifyTenant, aiPromptUsageController.getAIPromptUsages);
 
 // Payments
 router.post('/payments', paymentController.createPayment);

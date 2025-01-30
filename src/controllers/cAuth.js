@@ -28,7 +28,7 @@ const loginUser = (req, res) => {
 
     if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
 
-    const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: 86400 }); // 24 hours
+    const token = jwt.sign({ id: user.id, tenantId: 1 }, secretKey, { expiresIn: 86400 }); // 24 hours
     res.status(200).send({ auth: true, token });
   });
 };
@@ -40,8 +40,8 @@ const verifyToken = (req, res, next) => {
 
   jwt.verify(token, secretKey, (err, decoded) => {
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-
-    req.userId = decoded.id;
+    // console.log("TOKEN DECODED VERIFY TOKEN FUNC", decoded);
+    req.user = decoded;
     next();
   });
 };
