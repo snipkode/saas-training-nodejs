@@ -12,10 +12,10 @@ Instruksi tentang cara menginstal dan mengatur proyek.
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/snipkode/saas-training-nodejs.git
 
 # Masuk ke direktori proyek
-cd yourproject
+cd saas-training-nodejs
 
 # Instal dependensi
 npm install
