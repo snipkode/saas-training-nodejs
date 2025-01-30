@@ -8,6 +8,8 @@ const userSubscriptionController = require('./controllers/cUserSubscriptionPlan'
 const aiPromptUsageController = require('./controllers/cPromptUsage');
 const paymentController = require('./controllers/cPayment');
 
+const middleware = require('./middleware/verifyTenantOrAdmin');
+
 // Users
 router.post('/users', userController.createUser);
 router.get('/users', userController.getUsers);
@@ -24,8 +26,8 @@ router.delete('/subscription-plans/:id', subscriptionPlanController.deleteSubscr
 // User Subscriptions
 router.post('/user-subscriptions', userSubscriptionController.createUserSubscription);
 router.get('/user-subscriptions', userSubscriptionController.getUserSubscriptions);
-router.put('/user-subscriptions/:id', userSubscriptionController.updateUserSubscription);
-router.delete('/user-subscriptions/:id', userSubscriptionController.deleteUserSubscription);
+router.put('/user-subscriptions/:id', middleware.verifyTenantOrAdmin, userSubscriptionController.updateUserSubscription);
+router.delete('/user-subscriptions/:id', middleware.verifyTenantOrAdmin, userSubscriptionController.deleteUserSubscription);
 
 // AI Prompt Usage
 router.post('/ai-prompt-usage', aiPromptUsageController.createAIPromptUsage);

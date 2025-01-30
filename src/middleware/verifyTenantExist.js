@@ -1,6 +1,6 @@
-const db = require('../../config/db');
+const db = require('../config/db');
 
-const verifyTenant = async (req, res, next) => {
+const verifyTenantExist = async (req, res, next) => {
   try {
     
     const tenantId = req.user.tenantId;
@@ -22,5 +22,5 @@ const verifyTenant = async (req, res, next) => {
 };
 
 module.exports = {
-  verifyTenant,
+  verifyTenantExist,
 };
