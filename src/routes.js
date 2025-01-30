@@ -2,12 +2,12 @@
 const express = require('express');
 const router = express.Router();
 
-const userController = require('./controllers/users');
-const subscriptionPlanController = require('./controllers/subscriptionPlan');
-const userSubscriptionController = require('./controllers/userSubscriptionPlan');
-const aiPromptUsageController = require('./controllers/aiPromptUsage');
-const paymentController = require('./controllers/payment');
-const authController = require('./controllers/auth');
+const userController = require('./controllers/cUsers');
+const subscriptionPlanController = require('./controllers/cSubscriptionPlan');
+const userSubscriptionController = require('./controllers/cUserSubscriptionPlan');
+const aiPromptUsageController = require('./controllers/cPromptUsage');
+const paymentController = require('./controllers/cPayment');
+const authController = require('./controllers/cAuth');
 const tenantMiddleware = require('./middleware/tenant/verifyTenant');
 
 // Users

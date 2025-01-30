@@ -1,4 +1,3 @@
-// aiPromptUsageController.js
 const db = require('../config/db');
 
 // Create AI Prompt Usage
