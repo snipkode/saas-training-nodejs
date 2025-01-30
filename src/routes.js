@@ -8,7 +8,7 @@ const userSubscriptionController = require('./controllers/userSubscriptionPlan')
 const aiPromptUsageController = require('./controllers/aiPromptUsage');
 const paymentController = require('./controllers/payment');
 const authController = require('./controllers/auth');
-const tenantMiddleware = require('./middleware/tenantMiddleware');
+const tenantMiddleware = require('./middleware/tenant/verifyTenant');
 
 // Users
 router.post('/users', authController.verifyToken, tenantMiddleware.verifyTenant, userController.createUser);
