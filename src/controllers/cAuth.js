@@ -8,8 +8,9 @@ const secretKey = 'your_secret_key';
 const registerUser = (req, res) => {
   const { name, email, password } = req.body;
   const password_hash = bcrypt.hashSync(password, 8);
+  const tenant_id = req.body.tenant_id || 1; // Default tenant_id to 1 if not provided
 
-  db.query('INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)', [name, email, password_hash], (err, result) => {
+  db.query('INSERT INTO users (tenant_id, name, email, password_hash) VALUES (?, ?, ?, ?)', [tenant_id, name, email, password_hash], (err, result) => {
     if (err) return res.status(500).send({ error: err.message });
     res.status(201).send({ message: 'User registered successfully', id: result.insertId });
   });
