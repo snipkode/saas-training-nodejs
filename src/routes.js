@@ -7,15 +7,13 @@ const subscriptionPlanController = require('./controllers/cSubscriptionPlan');
 const userSubscriptionController = require('./controllers/cUserSubscriptionPlan');
 const aiPromptUsageController = require('./controllers/cPromptUsage');
 const paymentController = require('./controllers/cPayment');
-const authController = require('./controllers/cAuth');
-const tenantMiddleware = require('./middleware/tenant/verifyTenant');
 
 // Users
-router.post('/users', authController.verifyToken, tenantMiddleware.verifyTenant, userController.createUser);
-router.get('/users', authController.verifyToken, tenantMiddleware.verifyTenant, userController.getUsers);
-router.get('/users/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userController.getUserById);
-router.put('/users/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userController.updateUser);
-router.delete('/users/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userController.deleteUser);
+router.post('/users', userController.createUser);
+router.get('/users', userController.getUsers);
+router.get('/users/:id', userController.getUserById);
+router.put('/users/:id', userController.updateUser);
+router.delete('/users/:id', userController.deleteUser);
 
 // Subscription Plans
 router.post('/subscription-plans', subscriptionPlanController.createSubscriptionPlan);
@@ -24,27 +22,18 @@ router.put('/subscription-plans/:id', subscriptionPlanController.updateSubscript
 router.delete('/subscription-plans/:id', subscriptionPlanController.deleteSubscriptionPlan);
 
 // User Subscriptions
-router.post('/user-subscriptions', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.createUserSubscription);
-router.get('/user-subscriptions', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.getUserSubscriptions);
-router.put('/user-subscriptions/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.updateUserSubscription);
-router.delete('/user-subscriptions/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.deleteUserSubscription);
+router.post('/user-subscriptions', userSubscriptionController.createUserSubscription);
+router.get('/user-subscriptions', userSubscriptionController.getUserSubscriptions);
+router.put('/user-subscriptions/:id', userSubscriptionController.updateUserSubscription);
+router.delete('/user-subscriptions/:id', userSubscriptionController.deleteUserSubscription);
 
 // AI Prompt Usage
-router.post('/ai-prompt-usage', authController.verifyToken, tenantMiddleware.verifyTenant, aiPromptUsageController.createAIPromptUsage);
-router.get('/ai-prompt-usage', authController.verifyToken, tenantMiddleware.verifyTenant, aiPromptUsageController.getAIPromptUsages);
+router.post('/ai-prompt-usage', aiPromptUsageController.createAIPromptUsage);
+router.get('/ai-prompt-usage', aiPromptUsageController.getAIPromptUsages);
 
 // Payments
-router.post('/payments', authController.verifyToken, tenantMiddleware.verifyTenant, paymentController.createPayment);
-router.get('/payments', authController.verifyToken, tenantMiddleware.verifyTenant, paymentController.getPayments);
-
-// Authentication
-router.post('/register', authController.registerUser);
-router.post('/login', authController.loginUser);
-
-// Protected route example
-router.get('/protected', authController.verifyToken, (req, res) => {
-  res.status(200).send('This is a protected route');
-});
+router.post('/payments', paymentController.createPayment);
+router.get('/payments', paymentController.getPayments);
 
 // API Test
 router.get('/test', (req, res) => {
