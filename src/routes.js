@@ -24,18 +24,18 @@ router.put('/subscription-plans/:id', subscriptionPlanController.updateSubscript
 router.delete('/subscription-plans/:id', subscriptionPlanController.deleteSubscriptionPlan);
 
 // User Subscriptions
-router.post('/user-subscriptions', userSubscriptionController.createUserSubscription);
-router.get('/user-subscriptions', userSubscriptionController.getUserSubscriptions);
-router.put('/user-subscriptions/:id', userSubscriptionController.updateUserSubscription);
-router.delete('/user-subscriptions/:id', userSubscriptionController.deleteUserSubscription);
+router.post('/user-subscriptions', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.createUserSubscription);
+router.get('/user-subscriptions', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.getUserSubscriptions);
+router.put('/user-subscriptions/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.updateUserSubscription);
+router.delete('/user-subscriptions/:id', authController.verifyToken, tenantMiddleware.verifyTenant, userSubscriptionController.deleteUserSubscription);
 
 // AI Prompt Usage
 router.post('/ai-prompt-usage', authController.verifyToken, tenantMiddleware.verifyTenant, aiPromptUsageController.createAIPromptUsage);
 router.get('/ai-prompt-usage', authController.verifyToken, tenantMiddleware.verifyTenant, aiPromptUsageController.getAIPromptUsages);
 
 // Payments
-router.post('/payments', paymentController.createPayment);
-router.get('/payments', paymentController.getPayments);
+router.post('/payments', authController.verifyToken, tenantMiddleware.verifyTenant, paymentController.createPayment);
+router.get('/payments', authController.verifyToken, tenantMiddleware.verifyTenant, paymentController.getPayments);
 
 // Authentication
 router.post('/register', authController.registerUser);
