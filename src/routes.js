@@ -11,11 +11,11 @@ const paymentController = require('./controllers/cPayment');
 const middleware = require('./middleware/verifyTenantOrAdmin');
 
 // Users
-router.post('/users', userController.createUser);
-router.get('/users', userController.getUsers);
-router.get('/users/:id', userController.getUserById);
-router.put('/users/:id', userController.updateUser);
-router.delete('/users/:id', userController.deleteUser);
+router.post('/users', middleware.verifyTenantOrAdmin, userController.createUser);
+router.get('/users', middleware.verifyTenantOrAdmin, userController.getUsers);
+router.get('/users/:id', middleware.verifyTenantOrAdmin, userController.getUserById);
+router.put('/users/:id', middleware.verifyTenantOrAdmin, userController.updateUser);
+router.delete('/users/:id', middleware.verifyTenantOrAdmin, userController.deleteUser);
 
 // Subscription Plans
 router.post('/subscription-plans', subscriptionPlanController.createSubscriptionPlan);

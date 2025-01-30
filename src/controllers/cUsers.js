@@ -40,13 +40,13 @@ const updateUser = (req, res) => {
   });
 };
 
-// Delete User
+// Soft Delete User
 const deleteUser = (req, res) => {
   const { id } = req.params;
   const tenantId = req.user.tenantId;
-  db.query('DELETE FROM users WHERE id = ? AND tenantId = ?', [id, tenantId], (err, result) => {
+  db.query('UPDATE users SET status = "inactive" WHERE id = ? AND tenantId = ?', [id, tenantId], (err, result) => {
     if (err) return res.status(500).send({ error: err.message });
-    res.status(200).send({ message: 'User deleted successfully' });
+    res.status(200).send({ message: 'User deactivated successfully' });
   });
 };
 
