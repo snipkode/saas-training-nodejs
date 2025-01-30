@@ -30,6 +30,39 @@ Instruksi tentang cara menggunakan proyek.
 npm start
 ```
 
+## Menjalankan dengan Docker
+
+Panduan untuk menjalankan proyek menggunakan Docker container.
+
+1. Pastikan Docker sudah terinstal di sistem Anda.
+2. Bangun image Docker.
+
+```bash
+docker build -t saas-ai-subscription .
+```
+
+3. Jalankan container Docker.
+
+```bash
+docker run -d -p 3000:3000 --name saas-ai-subscription-container saas-ai-subscription
+```
+
+4. Akses aplikasi di browser melalui `http://localhost:3000`.
+
+## Menjalankan dengan Docker Compose
+
+Panduan untuk menjalankan proyek menggunakan Docker Compose.
+
+1. Pastikan Docker dan Docker Compose sudah terinstal di sistem Anda.
+2. Jalankan Docker Compose.
+
+```bash
+docker-compose up -d
+```
+
+3. Akses aplikasi di browser melalui `http://localhost:3000`.
+4. Akses phpMyAdmin di browser melalui `http://localhost:8080` untuk mengelola basis data.
+
 ## Skema Basis Data
 
 Proyek ini menggunakan basis data MySQL dengan skema berikut:
