@@ -1,0 +1,286 @@
+openapi: 3.0.0
+info:
+  title: SaaS Training API
+  version: 1.0.0
+  description: API specification for the SaaS Training application
+
+paths:
+  /test:
+    get:
+      summary: Test the API
+      responses:
+        '200':
+          description: API is working
+
+  /users:
+    post:
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+    delete:
+      summary: Delete a user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User deleted
+
+  /subscription-plans:
+    post:
+      summary: Create a subscription plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionPlan'
+      responses:
+        '201':
+          description: Subscription plan created
+    get:
+      summary: Get all subscription plans
+      responses:
+        '200':
+          description: A list of subscription plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionPlan'
+
+  /subscription-plans/{id}:
+    put:
+      summary: Update a subscription plan
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionPlan'
+      responses:
+        '200':
+          description: Subscription plan updated
+    delete:
+      summary: Delete a subscription plan
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Subscription plan deleted
+
+  /user-subscriptions:
+    post:
+      summary: Create a user subscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubscription'
+      responses:
+        '201':
+          description: User subscription created
+    get:
+      summary: Get all user subscriptions
+      responses:
+        '200':
+          description: A list of user subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSubscription'
+
+  /user-subscriptions/{id}:
+    put:
+      summary: Update a user subscription
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubscription'
+      responses:
+        '200':
+          description: User subscription updated
+    delete:
+      summary: Delete a user subscription
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User subscription deleted
+
+  /ai-prompt-usage:
+    post:
+      summary: Create an AI prompt usage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AIPromptUsage'
+      responses:
+        '201':
+          description: AI prompt usage created
+    get:
+      summary: Get all AI prompt usages
+      responses:
+        '200':
+          description: A list of AI prompt usages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AIPromptUsage'
+
+  /payments:
+    post:
+      summary: Create a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Payment'
+      responses:
+        '201':
+          description: Payment created
+    get:
+      summary: Get all payments
+      responses:
+        '200':
+          description: A list of payments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Payment'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - name
+        - email
+        - password_hash
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        password_hash:
+          type: string
+    SubscriptionPlan:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    UserSubscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        planId:
+          type: integer
+    AIPromptUsage:
+      type: object
+      properties:
+        id:
+          type: integer
+        prompt:
+          type: string
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+        amount:
+          type: number
