@@ -68,6 +68,112 @@
 			"name": "02 - User Subscription",
 			"item": [
 				{
+					"name": "payments",
+					"item": [
+						{
+							"name": "Create Payments",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"amount\": 100000,\r\n  \"payment_status\": \"pending\",\r\n  \"payment_type\": \"qris\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/payments",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"payments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Payments",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/payments/history",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"payments",
+										"history"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Payment Callback",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "x-access-token",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseURL}}/payments/notification",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"payments",
+										"notification"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "get-user-subscriptions",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -230,7 +336,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"user_id\": 1,\r\n  \"plan_id\": 3,\r\n  \"start_date\": \"2025-01-01\",\r\n  \"end_date\": \"2025-01-31\",\r\n  \"status\": \"active\"\r\n}",
+									"raw": "{\r\n  \"user_id\": 1,\r\n  \"plan_id\": 2,\r\n  \"start_date\": \"2025-01-31\",\r\n  \"end_date\": \"2025-02-24\",\r\n  \"status\": \"active\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -238,13 +344,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseURL}}/user-subscriptions/11",
+									"raw": "{{baseURL}}/user-subscriptions/5",
 									"host": [
 										"{{baseURL}}"
 									],
 									"path": [
 										"user-subscriptions",
-										"11"
+										"5"
 									]
 								}
 							},
