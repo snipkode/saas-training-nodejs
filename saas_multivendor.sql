@@ -66,8 +66,9 @@ CREATE TABLE ai_prompt_usage (
 CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
+    order_id VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL COMMENT 'Amount in IDR',
-    payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    payment_status ENUM('pending', 'completed', 'failed', 'success') DEFAULT 'pending',
     transaction_token VARCHAR(255),
     payment_type VARCHAR(50),
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,7 +90,7 @@ INSERT INTO user_roles (role_name) VALUES
 INSERT INTO users (tenant_id, role_id, name, email, password_hash) VALUES 
 (1, 1, 'Admin', 'admin@solusikonsep.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6'),
 (1, 2, 'Tenant', 'tenant@solusikonsep.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6'),
-(2, 3, 'User', 'user@solusikonsep.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6');
+(2, 3, 'User', 'user@arkanaputra.co.id', '$2a$08$pNJM4VHy0IV4RH88Iok7p.3cYT314fwuYmSJ22DtRHNeP7bwO53i6');
 
 -- Insert Dummy Subscription Plans
 INSERT INTO subscription_plans (tenant_id, name, price, prompt_limit) VALUES 
@@ -114,10 +115,10 @@ INSERT INTO ai_prompt_usage (user_id, prompt_text) VALUES
 (3, 'Prompt text 3 by Charlie');
 
 -- Insert Dummy Payments
-INSERT INTO payments (user_id, amount, payment_status) VALUES 
-(1, 0.00, 'completed'),
-(2, 149000.00, 'completed'),
-(3, 299000.00, 'completed');
+INSERT INTO payments (user_id, order_id, amount, payment_status, transaction_token, payment_type) VALUES 
+(1, 'order-1', 0.00, 'completed', 'token-1', 'credit_card'),
+(2, 'order-2', 149000.00, 'completed', 'token-2', 'bank_transfer'),
+(3, 'order-3', 299000.00, 'completed', 'token-3', 'qris');
 
 -- View jumlah penggunaan prompts per user
 CREATE VIEW user_prompt_count AS
