@@ -63,6 +63,33 @@ docker-compose up -d
 3. Akses aplikasi di browser melalui `http://localhost:3000`.
 4. Akses phpMyAdmin di browser melalui `http://localhost:8080` untuk mengelola basis data.
 
+## Simulasi Pembayaran
+
+Untuk mensimulasikan pembayaran menggunakan sandbox Midtrans, ikuti langkah-langkah berikut:
+
+1. Pastikan Anda telah mengatur `MIDTRANS_SERVER_KEY` dan `MIDTRANS_CLIENT_KEY` di file `.env` Anda dengan kunci sandbox Midtrans Anda.
+
+2. Mulai aplikasi Anda menggunakan Docker Compose:
+   ```sh
+   docker-compose up
+   ```
+
+3. Buka aplikasi Anda dan lanjutkan ke bagian pembayaran.
+
+4. Ketika diminta untuk pembayaran, gunakan URL berikut untuk mensimulasikan proses pembayaran:
+   [Simulator Pembayaran Midtrans](https://simulator.sandbox.midtrans.com)
+
+5. Ikuti instruksi di Simulator Pembayaran Midtrans untuk menyelesaikan proses pembayaran.
+
+6. Aplikasi Anda sekarang harus mencerminkan status pembayaran yang disimulasikan.
+
+7. Pastikan Anda telah mengatur endpoint callback notifikasi pada Midtrans dengan URL berikut:
+   ```sh
+   {{baseURLTunnel}}/payments/notification
+   ```
+
+8. Untuk mengetes simulasi pembayaran subscription, URL harus menggunakan ngrok. Buka ngrok pada port 4040 di browser dan copy-paste baseURL-nya ke pengaturan notification webhook Midtrans di [Midtrans Dashboard](https://dashboard.sandbox.midtrans.com/settings/vtweb_configuration/history).
+
 ## Skema Basis Data
 
 Proyek ini menggunakan basis data MySQL dengan skema berikut:
