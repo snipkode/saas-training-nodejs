@@ -13,11 +13,10 @@ const swaggerDocument = yaml.load('./api-spec.yaml');
 
 app.use(express.json());
 
-app.use('/api', authController.verifyToken, tenantMiddleware.verifyTenant, routes);
 app.post('/api/login', authController.loginUser);
 app.post('/api/register', authController.registerUser);
 
-
+app.use('/api', authController.verifyToken, tenantMiddleware.verifyTenant, routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => {

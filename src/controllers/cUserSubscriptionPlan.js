@@ -5,16 +5,25 @@ const db = require('../config/db');
 const createUserSubscription = (req, res) => {
   const user_id = req.user.id;
   const { plan_id, start_date, end_date, status } = req.body;
-  db.query('INSERT INTO user_subscriptions (user_id, plan_id, start_date, end_date, status) VALUES (?, ?, ?, ?, ?)', [user_id, plan_id, start_date, end_date, status], (err, result) => {
+  const created_date = new Date();
+
+  // Check if a subscription already exists and is active
+  db.query('SELECT * FROM user_subscriptions WHERE user_id = ? AND status = "active" AND end_date >= CURDATE()', [user_id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
-    res.status(201).send({ message: 'User subscription created successfully', id: result.insertId });
+    if (results.length > 0) return res.status(400).send({ message: 'An active subscription already exists for this user.' });
+
+    // Create new subscription
+    db.query('INSERT INTO user_subscriptions (user_id, plan_id, start_date, end_date, status, created_date) VALUES (?, ?, ?, ?, ?, ?)', [user_id, plan_id, start_date, end_date, status, created_date], (err, result) => {
+      if (err) return res.status(500).send({ error: err.message });
+      res.status(201).send({ message: 'User subscription created successfully', id: result.insertId });
+    });
   });
 };
 
 // Get all User Subscriptions
 const getUserSubscriptions = (req, res) => {
   const user_id = req.user.id;
-  db.query('SELECT * FROM user_subscriptions WHERE user_id = ? LIMIT = 1', [user_id], (err, results) => {
+  db.query('SELECT * FROM user_subscriptions WHERE user_id = ? LIMIT 1', [user_id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
     res.status(200).json(results);
   });
@@ -30,12 +39,12 @@ const updateUserSubscription = (req, res) => {
   });
 };
 
-// Delete User Subscription
+// Soft Delete User Subscription
 const deleteUserSubscription = (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM user_subscriptions WHERE id = ?', [id], (err, result) => {
+  db.query('UPDATE user_subscriptions SET status = "cancelled" WHERE id = ?', [id], (err, result) => {
     if (err) return res.status(500).send({ error: err.message });
-    res.status(200).send({ message: 'User subscription deleted successfully' });
+    res.status(200).send({ message: 'User subscription cancelled successfully' });
   });
 };
 

@@ -39,6 +39,7 @@ CREATE TABLE user_subscriptions (
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
     status ENUM('active', 'expired', 'cancelled') DEFAULT 'active',
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (plan_id) REFERENCES subscription_plans(id) ON DELETE CASCADE
 );
@@ -81,10 +82,10 @@ INSERT INTO subscription_plans (tenant_id, name, price, prompt_limit) VALUES
 (2, 'Enterprise Plan', 749000.00, 9999);
 
 -- Insert Dummy User Subscriptions
-INSERT INTO user_subscriptions (user_id, plan_id, start_date, end_date, status) VALUES 
-(1, 1, '2023-01-01', '2023-12-31', 'active'),
-(2, 2, '2023-01-01', '2023-12-31', 'active'),
-(3, 3, '2023-01-01', '2023-12-31', 'active');
+INSERT INTO user_subscriptions (user_id, plan_id, start_date, end_date, status, created_date) VALUES 
+(1, 1, '2023-01-01', '2023-12-31', 'active', CURRENT_TIMESTAMP),
+(2, 2, '2023-01-01', '2023-12-31', 'active', CURRENT_TIMESTAMP),
+(3, 3, '2023-01-01', '2023-12-31', 'active', CURRENT_TIMESTAMP);
 
 -- Insert Dummy AI Prompt Usage
 INSERT INTO ai_prompt_usage (user_id, prompt_text) VALUES 
