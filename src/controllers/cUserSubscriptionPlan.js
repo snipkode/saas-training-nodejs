@@ -7,6 +7,23 @@ const isValidDate = (dateString) => {
   return date instanceof Date && !isNaN(date);
 };
 
+// Helper function to validate start and end dates
+const validateDates = (start_date, end_date) => {
+  if (!isValidDate(start_date)) {
+    return { valid: false, message: 'Invalid start date.' };
+  }
+  if (!isValidDate(end_date)) {
+    return { valid: false, message: 'Invalid end date.' };
+  }
+  if (new Date(start_date) < new Date()) {
+    return { valid: false, message: 'Start date cannot be a back date.' };
+  }
+  if (new Date(end_date) < new Date()) {
+    return { valid: false, message: 'End date cannot be expired.' };
+  }
+  return { valid: true };
+};
+
 // Create User Subscription
 const createUserSubscription = (req, res) => {
   const user_id = req.user.userId;
@@ -19,17 +36,9 @@ const createUserSubscription = (req, res) => {
   const end_date = req.body.end_date || new Date(currentDate.setMonth(currentDate.getMonth() + 1)).toISOString().split('T')[0];
 
   // Validate dates
-  if (!isValidDate(start_date)) {
-    return res.status(400).send({ message: 'Invalid start date.' });
-  }
-  if (!isValidDate(end_date)) {
-    return res.status(400).send({ message: 'Invalid end date.' });
-  }
-  if (new Date(start_date) < new Date()) {
-    return res.status(400).send({ message: 'Start date cannot be a back date.' });
-  }
-  if (new Date(end_date) < new Date()) {
-    return res.status(400).send({ message: 'End date cannot be expired.' });
+  const dateValidation = validateDates(start_date, end_date);
+  if (!dateValidation.valid) {
+    return res.status(400).send({ message: dateValidation.message });
   }
 
   // Check if a subscription already exists and is active
@@ -59,6 +68,12 @@ const updateUserSubscription = (req, res) => {
   const { id } = req.params;
   const { user_id, plan_id, start_date, end_date } = req.body;
 
+  // Validate dates
+  const dateValidation = validateDates(start_date, end_date);
+  if (!dateValidation.valid) {
+    return res.status(400).send({ message: dateValidation.message });
+  }
+
   // Check if the subscription is still active
   db.query('SELECT * FROM user_subscriptions WHERE id = ? AND status = "active"', [id], (err, results) => {
     if (err) return res.status(500).send({ error: err.message });
@@ -67,7 +82,7 @@ const updateUserSubscription = (req, res) => {
     // Update the subscription
     db.query('UPDATE user_subscriptions SET user_id = ?, plan_id = ?, start_date = ?, end_date = ? WHERE id = ?', [user_id, plan_id, start_date, end_date, id], (err, result) => {
       if (err) return res.status(500).send({ error: err.message });
-      res.status(200).send({ message: 'User subscription updated successfully' });
+      res.status(200).send({ message: 'User subscription updated successfully', subscription: results[0] });
     });
   });
 };
@@ -99,8 +114,6 @@ const deleteUserSubscription = (req, res) => {
       }
 
       res.status(200).send({ message: 'Not Found Data User subscription cancelled'});
-
-     
     });
   });
 };
