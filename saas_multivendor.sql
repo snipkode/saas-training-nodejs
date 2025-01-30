@@ -68,6 +68,8 @@ CREATE TABLE payments (
     user_id INT NOT NULL,
     amount DECIMAL(10,2) NOT NULL COMMENT 'Amount in IDR',
     payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    transaction_token VARCHAR(255),
+    payment_type VARCHAR(50),
     payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
