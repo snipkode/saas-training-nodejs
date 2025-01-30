@@ -33,6 +33,12 @@ const getUserSubscriptions = (req, res) => {
 const updateUserSubscription = (req, res) => {
   const { id } = req.params;
   const { user_id, plan_id, start_date, end_date, status } = req.body;
+
+  // Check if the user is the owner or an admin
+  if (req.user.userId !== user_id && req.user.roleId !== 2) {
+    return res.status(403).send({ message: 'You are not authorized to update this subscription.' });
+  }
+
   db.query('UPDATE user_subscriptions SET user_id = ?, plan_id = ?, start_date = ?, end_date = ?, status = ? WHERE id = ?', [user_id, plan_id, start_date, end_date, status, id], (err, result) => {
     if (err) return res.status(500).send({ error: err.message });
     res.status(200).send({ message: 'User subscription updated successfully' });

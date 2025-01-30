@@ -29,7 +29,7 @@ const loginUser = (req, res) => {
 
     if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
 
-    const token = jwt.sign({ id: user.id, tenantId: 1 }, secretKey, { expiresIn: 86400 }); // 24 hours
+    const token = jwt.sign({ userId: user.id,  tenantId: user.tenant_id, roleId: user.role_id }, secretKey, { expiresIn: 86400 }); // 24 hours
     res.status(200).send({ auth: true, token });
   });
 };

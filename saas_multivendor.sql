@@ -9,15 +9,23 @@ CREATE TABLE tenants (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table Users (with tenant association)
+-- Table User Roles
+CREATE TABLE user_roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role_name ENUM('admin', 'tenant', 'user') NOT NULL
+);
+
+-- Table Users (with tenant association and role)
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tenant_id INT NOT NULL,
+    tenant_id INT NOT NULL DEFAULT 3,
+    role_id INT NOT NULL DEFAULT 3,
     name VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE
+    FOREIGN KEY (tenant_id) REFERENCES tenants(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES user_roles(id) ON DELETE CASCADE
 );
 
 -- Table Subscription Plans
@@ -65,14 +73,20 @@ CREATE TABLE payments (
 
 -- Insert Dummy Tenants
 INSERT INTO tenants (name, domain) VALUES 
-('Tenant A', 'tenantA.com'),
-('Tenant B', 'tenantB.com');
+('Solusi Konsep Tech', 'solusikonsep.co.id'),
+('Arkana Putra Tech', 'arkanaputra.co.id');
+
+-- Insert User Roles
+INSERT INTO user_roles (role_name) VALUES 
+('admin'),
+('tenant'),
+('user');
 
 -- Insert Dummy Users
-INSERT INTO users (tenant_id, name, email, password_hash) VALUES 
-(1, 'Alice', 'alice@tenantA.com', 'hashed_password_1'),
-(1, 'Bob', 'bob@tenantA.com', 'hashed_password_2'),
-(2, 'Charlie', 'charlie@tenantB.com', 'hashed_password_3');
+INSERT INTO users (tenant_id, role_id, name, email, password_hash) VALUES 
+(1, 1, 'Alice', 'alice@tenantA.com', 'hashed_password_1'),
+(1, 2, 'Bob', 'bob@tenantA.com', 'hashed_password_2'),
+(2, 3, 'Charlie', 'charlie@tenantB.com', 'hashed_password_3');
 
 -- Insert Dummy Subscription Plans
 INSERT INTO subscription_plans (tenant_id, name, price, prompt_limit) VALUES 
