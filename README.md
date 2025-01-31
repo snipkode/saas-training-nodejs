@@ -248,6 +248,19 @@ Untuk mengecek model yang tersedia pada layanan AI, gunakan perintah curl beriku
 curl http://localhost:11434/api/tags
 ```
 
+## Tunnel Alternatif
+
+Sebagai alternatif dari pengaturan tunnel saat ini, Anda dapat menggunakan `cloudflared`. Ini adalah alat yang disediakan oleh Cloudflare yang memungkinkan Anda membuat tunnel aman ke server lokal Anda.
+
+Untuk menginstal `cloudflared`, ikuti instruksi pada [dokumentasi Cloudflare](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation).
+
+Setelah diinstal, Anda dapat memulai tunnel dengan perintah berikut:
+```sh
+cloudflared tunnel --url http://localhost:YOUR_PORT
+```
+
+Ganti `YOUR_PORT` dengan nomor port tempat aplikasi Anda berjalan.
+
 ## Kontribusi
 
 Panduan untuk berkontribusi pada proyek.
