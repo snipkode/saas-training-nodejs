@@ -40,7 +40,7 @@ const createAIPromptUsage = (req, res) => {
           // Insert new AI prompt usage
           db.query('INSERT INTO ai_prompt_usage (user_id, prompt_text, ai_response) VALUES (?, ?, ?)', [user_id, prompt_text, aiResponse], (err, result) => {
             if (err) return res.status(500).send({ error: err.message });
-            res.status(201).send({ message: 'AI prompt usage created successfully', id: result.insertId, aiResponse });
+            res.status(201).send({ message: 'AI prompt usage created successfully', promptUsageId: result.insertId, aiResponse });
           });
         }).catch(error => {
           res.status(500).send({ error: error.message });
