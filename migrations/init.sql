@@ -1,6 +1,9 @@
 CREATE DATABASE saas_ai;
 USE saas_ai;
 
+SET GLOBAL time_zone = 'Asia/Jakarta';
+SET time_zone = 'Asia/Jakarta';
+
 -- Table Tenants
 CREATE TABLE tenants (
     id INT AUTO_INCREMENT PRIMARY KEY,
