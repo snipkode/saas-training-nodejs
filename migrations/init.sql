@@ -58,6 +58,7 @@ CREATE TABLE ai_prompt_usage (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     prompt_text TEXT NOT NULL,
+    ai_response TEXT NOT NULL,
     used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
