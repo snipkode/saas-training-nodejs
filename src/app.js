@@ -2,6 +2,7 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const yaml = require('yamljs');
+const cors = require('cors');
 const routes = require('./routes');
 const authController = require('./controllers/cAuth');
 const verifyTenantMiddleware = require('./middleware/verifyTenantExist');
