@@ -35,7 +35,6 @@ router.get('/ai-prompt-usage', aiPromptUsageController.getAIPromptUsages);
 
 // Payments
 router.post('/payments',paymentController.paymentValidationRules, paymentController.createPayment);
-router.post('/payments/notification', paymentController.handleNotification);
 router.get('/payments/history', paymentController.getPayments);
 
 

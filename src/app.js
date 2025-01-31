@@ -5,6 +5,7 @@ const yaml = require('yamljs');
 const routes = require('./routes');
 const authController = require('./controllers/cAuth');
 const verifyTenantMiddleware = require('./middleware/verifyTenantExist');
+const paymentController = require('./controllers/cPayment');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.post('/api/login', authController.loginUser);
 app.post('/api/register', authController.registerUser);
+router.post('/api/payments/notification', paymentController.handleNotification);
 
 app.use('/api', authController.verifyToken, verifyTenantMiddleware.verifyTenantExist, routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
