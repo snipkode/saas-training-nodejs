@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  saasnet:
+    driver: bridge
+
 services:
   db:
     image: mysql:5.7
@@ -14,24 +18,37 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - saasnet
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   node:
     build: .
     container_name: node
     environment:
+      NODE_ENV: ${NODE_ENV:-development}
       DB_HOST: db
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       MIDTRANS_SERVER_KEY: ${MIDTRANS_SERVER_KEY}
       MIDTRANS_CLIENT_KEY: ${MIDTRANS_CLIENT_KEY}
+      OLLAMA_HOST: ollama:11434
     ports:
       - "3000:3000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - .:/usr/src/app:rw
+      - /usr/src/app/node_modules
     working_dir: /usr/src/app
+    networks:
+      - saasnet
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -41,15 +58,40 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - saasnet
 
   ngrok:
     image: wernight/ngrok
     container_name: ngrok
     ports:
-      - "4040:4040" # ngrok web interface
+      - "4040:4040"
     environment:
       NGROK_PORT: node:3000
       NGROK_AUTH: ${NGROK_AUTH}
+    depends_on:
+      - node
+    networks:
+      - saasnet
+
+  ollama:
+    image: ollama/ollama:0.5.6
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    command: sh -c "ollama pull llama3:8b && ollama serve"
+    networks:
+      - saasnet
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   db_data:
+  ollama_data:

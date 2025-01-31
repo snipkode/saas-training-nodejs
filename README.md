@@ -73,7 +73,7 @@ Untuk mensimulasikan pembayaran menggunakan sandbox Midtrans, ikuti langkah-lang
 
 3. Mulai aplikasi Anda menggunakan Docker Compose:
    ```sh
-   docker-compose up
+   docker-compose up --build
    ```
 
 4. Buka aplikasi Anda dan lanjutkan ke bagian pembayaran.
