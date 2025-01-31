@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import { format } from 'date-fns'
-
 export default function ChatMessage({ message, isUser }) {
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>

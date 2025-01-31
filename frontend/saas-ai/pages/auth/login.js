@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/login`, credentials, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
       })
 

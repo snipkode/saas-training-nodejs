@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import useChatStore from '@/store/useChatStore'
 import ChatMessage from '@/components/ChatMessage'
-import { PaperAirplaneIcon, PlusIcon, Bars3Icon } from '@heroicons/react/24/outline'
+import { FaPaperPlane, FaPlus, FaBars } from 'react-icons/fa'
 import withAuth from '@/utils/withAuth'
 
 function Chat() {
@@ -30,7 +30,7 @@ function Chat() {
       } transition-all duration-300 overflow-hidden border-r border-gray-200 dark:border-gray-800`}>
         <div className="flex flex-col h-full p-4">
           <button className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full">
-            <PlusIcon className="w-5 h-5" />
+            <FaPlus className="w-5 h-5" />
             <span>New Chat</span>
           </button>
           <div className="flex-1 mt-4 space-y-2 overflow-y-auto">
@@ -48,7 +48,7 @@ function Chat() {
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
             >
-              <Bars3Icon className="w-5 h-5" />
+              <FaBars className="w-5 h-5" />
             </button>
             <h1 className="text-xl font-semibold">Chat with AI</h1>
             <div className="w-9" /> {/* Spacer */}
@@ -93,7 +93,7 @@ function Chat() {
                 className="absolute right-3 bottom-3 p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors disabled:opacity-50"
                 disabled={!message.trim()}
               >
-                <PaperAirplaneIcon className="w-5 h-5" />
+                <FaPaperPlane className="w-5 h-5" />
               </button>
             </div>
           </form>
