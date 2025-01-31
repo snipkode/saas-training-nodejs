@@ -73,7 +73,7 @@ Untuk mensimulasikan pembayaran menggunakan sandbox Midtrans, ikuti langkah-lang
 
 3. Mulai aplikasi Anda menggunakan Docker Compose:
    ```sh
-   docker-compose up --build
+   docker-compose up --build -d
    ```
 
 4. Buka aplikasi Anda dan lanjutkan ke bagian pembayaran.
@@ -209,6 +209,14 @@ Berikut adalah dokumentasi API untuk proyek ini. Dokumentasi API Swagger tersedi
     "status": "active"
   }
   ```
+
+## Checking Available Models on AI Service
+
+Untuk mengecek model yang tersedia pada layanan AI, gunakan perintah curl berikut:
+
+```sh
+curl http://localhost:11434/api/tags
+```
 
 ## Kontribusi
 

@@ -83,7 +83,6 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
-    command: sh -c "ollama pull llama3:8b && ollama serve"
     networks:
       - saasnet
     healthcheck:
