@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 
 const swaggerDocument = yaml.load('./swagger.yaml');
 
+app.use(cors());
 app.use(express.json());
 
 app.post('/api/login', authController.loginUser);
