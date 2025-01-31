@@ -5,6 +5,17 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:3000/api
+components:
+  parameters:
+    x-access-token:
+      in: header
+      name: x-access-token
+      required: true
+      schema:
+        type: string
+      example: ${X_ACCESS_TOKEN}
+security:
+  - x-access-token: []
 paths:
   /login:
     post:
@@ -73,6 +84,8 @@ paths:
   /payments:
     post:
       summary: Create Payments
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       requestBody:
         required: true
         content:
@@ -96,23 +109,31 @@ paths:
   /payments/history:
     get:
       summary: Get All Payments
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       responses:
         '200':
           description: Daftar semua pembayaran
   /payments/notification:
     post:
       summary: Payment Callback
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       responses:
         '200':
           description: Callback notifikasi pembayaran
   /user-subscriptions:
     get:
       summary: Get User Subscriptions
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       responses:
         '200':
           description: Daftar langganan pengguna
     post:
       summary: Create User Subscriptions
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       requestBody:
         required: true
         content:
@@ -141,6 +162,8 @@ paths:
   /ai-prompt-usage:
     post:
       summary: Create AI Prompt Usage
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       requestBody:
         required: true
         content:
@@ -157,6 +180,8 @@ paths:
           description: Penggunaan prompt AI berhasil dibuat
     get:
       summary: Get AI Prompt Usages
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
       responses:
         '200':
           description: Daftar penggunaan prompt AI
@@ -164,6 +189,7 @@ paths:
     put:
       summary: Update User Subscriptions
       parameters:
+        - $ref: '#/components/parameters/x-access-token'
         - in: path
           name: id
           required: true
@@ -200,6 +226,7 @@ paths:
     delete:
       summary: Delete User Subscriptions
       parameters:
+        - $ref: '#/components/parameters/x-access-token'
         - in: path
           name: id
           required: true
@@ -208,11 +235,158 @@ paths:
       responses:
         '200':
           description: Langganan pengguna berhasil dihapus
-components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-security:
-  - bearerAuth: []
+  /test:
+    get:
+      summary: API Test Endpoint
+      parameters:
+        - $ref: '#/components/parameters/x-access-token'
+      responses:
+        '200':
+          description: API is working
+  /users:
+    post:
+      summary: Create User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                name: User 01
+                email: user01@example.com
+                password: password123
+      responses:
+        '200':
+          description: User successfully created
+    get:
+      summary: Get Users
+      responses:
+        '200':
+          description: List of users
+  /users/{id}:
+    get:
+      summary: Get User by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User details
+    put:
+      summary: Update User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                name: Updated User
+                email: updateduser@example.com
+                password: newpassword123
+      responses:
+        '200':
+          description: User successfully updated
+    delete:
+      summary: Delete User
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User successfully deleted
+  /subscription-plans:
+    post:
+      summary: Create Subscription Plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                duration:
+                  type: integer
+              example:
+                name: Basic Plan
+                price: 9.99
+                duration: 30
+      responses:
+        '200':
+          description: Subscription plan successfully created
+    get:
+      summary: Get Subscription Plans
+      responses:
+        '200':
+          description: List of subscription plans
+  /subscription-plans/{id}:
+    put:
+      summary: Update Subscription Plan
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                duration:
+                  type: integer
+              example:
+                name: Updated Plan
+                price: 19.99
+                duration: 60
+      responses:
+        '200':
+          description: Subscription plan successfully updated
+    delete:
+      summary: Delete Subscription Plan
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Subscription plan successfully deleted
