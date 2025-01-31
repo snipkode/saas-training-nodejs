@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.post('/api/login', authController.loginUser);
 app.post('/api/register', authController.registerUser);
-router.post('/api/payments/notification', paymentController.handleNotification);
+app.post('/api/payments/notification', paymentController.handleNotification);
 
 app.use('/api', authController.verifyToken, verifyTenantMiddleware.verifyTenantExist, routes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
