@@ -94,6 +94,8 @@ Untuk mensimulasikan pembayaran menggunakan sandbox Midtrans, ikuti langkah-lang
 
 10. Atur URL redirect setelah pembayaran berhasil di menu [Midtrans Dashboard](https://dashboard.sandbox.midtrans.com/settings/payment/finish-redirect).
 
+11. Untuk melihat hasil konfirmasi Midtrans melalui webhook, kunjungi history di sini: [Midtrans Dashboard History](https://dashboard.sandbox.midtrans.com/settings/vtweb_configuration/history).
+
 ## Skema Basis Data
 
 Proyek ini menggunakan basis data MySQL dengan skema berikut:
