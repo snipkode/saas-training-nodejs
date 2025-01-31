@@ -6,7 +6,7 @@ import axios from 'axios'
 import { FaLock } from 'react-icons/fa'
 
 export default function Login() {
-  const [credentials, setCredentials] = useState({ email: '', password: '' })
+  const [credentials, setCredentials] = useState({ email: 'admin@solusikonsep.co.id', password: 'u6{gHNaa' })
   const [error, setError] = useState('')
   const setUser = useAuthStore((state) => state.setUser)
   const router = useRouter()
@@ -24,6 +24,7 @@ export default function Login() {
 
       const data = response.data
       setUser(data.user)
+      localStorage.setItem('token', data.token) // Store token in localStorage
       router.push('/chat')
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
@@ -46,6 +47,7 @@ export default function Login() {
               <input
                 type="email"
                 required
+                defaultValue={credentials.email}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 placeholder="Email address"
                 onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
@@ -56,6 +58,7 @@ export default function Login() {
               <input
                 type="password"
                 required
+                defaultValue={credentials.password}
                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600"
                 placeholder="Password"
                 onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}

@@ -2,24 +2,54 @@ import { useState } from 'react'
 import useChatStore from '@/store/useChatStore'
 import ChatMessage from '@/components/ChatMessage'
 import { FaPaperPlane, FaPlus, FaBars } from 'react-icons/fa'
-import withAuth from '@/utils/withAuth'
+import axios from 'axios'
+import jwtDecode from 'jwt-decode'
+import { useRouter } from 'next/router'
 
 function Chat() {
   const [message, setMessage] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const { messages, addMessage } = useChatStore()
+  const router = useRouter()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!message.trim()) return
 
-    addMessage({
-      id: Date.now().toString(),
-      content: message,
-      timestamp: new Date().toISOString(),
-      isUser: true,
-    })
-    setMessage('')
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token')
+      if (token) {
+        const decodedToken = jwtDecode(token)
+        const currentTime = Date.now() / 1000
+
+        if (decodedToken.exp < currentTime) {
+          localStorage.removeItem('token')
+          router.replace('/auth/login')
+          return
+        }
+      }
+
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/messages`, {
+          content: message,
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        })
+
+        addMessage({
+          id: Date.now().toString(),
+          content: message,
+          timestamp: new Date().toISOString(),
+          isUser: true,
+        })
+        setMessage('')
+      } catch (err) {
+        console.error('Failed to send message', err)
+      }
+    }
   }
 
   return (
@@ -103,4 +133,4 @@ function Chat() {
   )
 }
 
-export default withAuth(Chat)
+export default Chat;
