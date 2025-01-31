@@ -96,6 +96,36 @@ Untuk mensimulasikan pembayaran menggunakan sandbox Midtrans, ikuti langkah-lang
 
 11. Untuk melihat hasil konfirmasi Midtrans melalui webhook, kunjungi history di sini: [Midtrans Dashboard History](https://dashboard.sandbox.midtrans.com/settings/vtweb_configuration/history).
 
+### Contoh Request Body Notifikasi Pembayaran
+
+Berikut adalah contoh request body notifikasi pembayaran dari Midtrans:
+
+```json
+{
+  "va_numbers": [
+    {
+      "va_number": "85293557733750664904806",
+      "bank": "bca"
+    }
+  ],
+  "transaction_time": "2025-01-31 07:00:57",
+  "transaction_status": "settlement",
+  "transaction_id": "054e96a2-6010-4010-8529-836b2afabb55",
+  "status_message": "midtrans payment notification",
+  "status_code": "200",
+  "signature_key": "6679d5143067a34bfee3a676d209bbb04d77e566eb8cbba7b193f5eb48cc8e0725d3adf90af43dc54e55555c2e9a82d87488c86096cf315378e3676328e9daae",
+  "settlement_time": "2025-01-31 07:01:05",
+  "payment_type": "bank_transfer",
+  "payment_amounts": [],
+  "order_id": "order-979721e6-cff5-4f8b-90d0-0e0d7dfe4cf0",
+  "merchant_id": "G311685293",
+  "gross_amount": "152123.00",
+  "fraud_status": "accept",
+  "expiry_time": "2025-02-01 07:00:56",
+  "currency": "IDR"
+}
+```
+
 ## Skema Basis Data
 
 Proyek ini menggunakan basis data MySQL dengan skema berikut:
