@@ -9,7 +9,7 @@ const verifyTenantMiddleware = require('./middleware/verifyTenantExist');
 const app = express();
 const port = process.env.PORT || 3000;
 
-const swaggerDocument = yaml.load('./api-spec.yaml');
+const swaggerDocument = yaml.load('./swagger.yaml');
 
 app.use(express.json());
 

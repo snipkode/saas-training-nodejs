@@ -1,0 +1,218 @@
+openapi: 3.0.0
+info:
+  title: Saas Training API
+  description: API documentation for Saas Training
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /login:
+    post:
+      summary: Login Pengguna
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                email: admin@solusikonsep.co.id
+                password: u6{gHNaa
+      responses:
+        '200':
+          description: Token akses berhasil dibuat
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+  /register:
+    post:
+      summary: Daftar Pengguna
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              example:
+                name: User 01
+                email: user01@solusikonsep.co.id
+                password: u6{gHNaa
+      responses:
+        '200':
+          description: Pengguna berhasil didaftarkan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  created_at:
+                    type: string
+                    format: date-time
+  /payments:
+    post:
+      summary: Create Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                payment_status:
+                  type: string
+                payment_type:
+                  type: string
+              example:
+                amount: 100000
+                payment_status: pending
+                payment_type: qris
+      responses:
+        '200':
+          description: Pembayaran berhasil dibuat
+  /payments/history:
+    get:
+      summary: Get All Payments
+      responses:
+        '200':
+          description: Daftar semua pembayaran
+  /payments/notification:
+    post:
+      summary: Payment Callback
+      responses:
+        '200':
+          description: Callback notifikasi pembayaran
+  /user-subscriptions:
+    get:
+      summary: Get User Subscriptions
+      responses:
+        '200':
+          description: Daftar langganan pengguna
+    post:
+      summary: Create User Subscriptions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plan_id:
+                  type: integer
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                status:
+                  type: string
+              example:
+                plan_id: 1
+                start_date: 2025-01-01
+                end_date: 2025-02-01
+                status: active
+      responses:
+        '200':
+          description: Langganan pengguna berhasil dibuat
+  /ai-prompt-usage:
+    post:
+      summary: Create AI Prompt Usage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt_text:
+                  type: string
+              example:
+                prompt_text: 00 | Generate a summary for the latest news article.
+      responses:
+        '200':
+          description: Penggunaan prompt AI berhasil dibuat
+    get:
+      summary: Get AI Prompt Usages
+      responses:
+        '200':
+          description: Daftar penggunaan prompt AI
+  /user-subscriptions/{id}:
+    put:
+      summary: Update User Subscriptions
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                plan_id:
+                  type: integer
+                start_date:
+                  type: string
+                  format: date
+                end_date:
+                  type: string
+                  format: date
+                status:
+                  type: string
+              example:
+                user_id: 1
+                plan_id: 2
+                start_date: 2025-01-31
+                end_date: 2025-02-24
+                status: active
+      responses:
+        '200':
+          description: Langganan pengguna berhasil diperbarui
+    delete:
+      summary: Delete User Subscriptions
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Langganan pengguna berhasil dihapus
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
