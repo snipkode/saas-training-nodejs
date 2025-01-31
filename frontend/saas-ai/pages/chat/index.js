@@ -1,22 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useChatStore from '@/store/useChatStore'
 import ChatMessage from '@/components/ChatMessage'
 import { FaPaperPlane, FaPlus, FaBars } from 'react-icons/fa'
 import axios from 'axios'
-import jwtDecode from 'jwt-decode'
+import {jwtDecode} from 'jwt-decode'
 import { useRouter } from 'next/router'
 
 function Chat() {
   const [message, setMessage] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const { messages, addMessage } = useChatStore()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const { messages, addMessage, setMessages } = useChatStore()
   const router = useRouter()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (!message.trim()) return
-
-    if (typeof window !== 'undefined') {
+  useEffect(() => {
+    const fetchMessages = async () => {
       const token = localStorage.getItem('token')
       if (token) {
         const decodedToken = jwtDecode(token)
@@ -27,10 +26,45 @@ function Chat() {
           router.replace('/auth/login')
           return
         }
+
+        try {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/messages`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+          })
+          setMessages(response.data)
+        } catch (err) {
+          setError('Failed to load messages')
+        } finally {
+          setLoading(false)
+        }
+      } else {
+        router.replace('/auth/login')
+      }
+    }
+
+    fetchMessages()
+  }, [router, setMessages])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!message.trim()) return
+
+    const token = localStorage.getItem('token')
+    if (token) {
+      const decodedToken = jwtDecode(token)
+      const currentTime = Date.now() / 1000
+
+      if (decodedToken.exp < currentTime) {
+        localStorage.removeItem('token')
+        router.replace('/auth/login')
+        return
       }
 
       try {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/messages`, {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/messages`, {
           content: message,
         }, {
           headers: {
@@ -40,14 +74,14 @@ function Chat() {
         })
 
         addMessage({
-          id: Date.now().toString(),
+          id: response.data.id,
           content: message,
-          timestamp: new Date().toISOString(),
+          timestamp: response.data.timestamp,
           isUser: true,
         })
         setMessage('')
       } catch (err) {
-        console.error('Failed to send message', err)
+        setError('Failed to send message')
       }
     }
   }
@@ -87,7 +121,15 @@ function Chat() {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
-          {messages.length === 0 ? (
+          {loading ? (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-gray-500 dark:text-gray-400">Loading messages...</p>
+            </div>
+          ) : error ? (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-red-500">{error}</p>
+            </div>
+          ) : messages.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <p className="text-gray-500 dark:text-gray-400">
                 Start a conversation with AI...
@@ -133,4 +175,4 @@ function Chat() {
   )
 }
 
-export default Chat;
+export default Chat
